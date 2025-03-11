@@ -1,0 +1,96 @@
+/* Main CSS entry point for cybersecurity portfolio - consolidates all styles */
+
+/* Import all stylesheets in the correct order to prevent cascading issues */
+@import '../app/globals.css';
+@import './animations.css';
+@import './cyber-animations.css';
+
+/* Additional global styles and overrides */
+:root {
+  /* Ensure consistent usage of font variables */
+  --font-cyber: 'Share Tech Mono', monospace;
+  --font-terminal: 'Fira Code', monospace;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Fira Code', monospace;
+}
+
+/* Force consistent font usage */
+.font-cyber {
+  font-family: var(--font-cyber) !important;
+}
+
+.font-terminal {
+  font-family: var(--font-terminal) !important;
+}
+
+/* Enhance cyber theme across all components */
+.cyber-card, 
+.cyber-button, 
+.cyber-terminal {
+  border-radius: 4px;
+  border: 1px solid var(--dark-tertiary);
+  background-color: var(--dark-secondary);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.cyber-card:hover,
+.cyber-button:hover {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 15px rgba(80, 250, 123, 0.2);
+}
+
+/* Ensure consistent cyber glow effects */
+.cyber-glow-green {
+  box-shadow: 0 0 15px rgba(80, 250, 123, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.cyber-glow-blue {
+  box-shadow: 0 0 15px rgba(139, 233, 253, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+.cyber-glow-purple {
+  box-shadow: 0 0 15px rgba(189, 147, 249, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Improve accessibility for neon text */
+.text-neon-green, 
+.text-cyber-blue, 
+.text-neon-purple {
+  text-shadow: 0 0 5px currentColor;
+}
+
+/* Add consistent styling for interactive elements */
+.cyber-interactive {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.cyber-interactive:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+/* Consistent styling for sections */
+.cyber-section {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.cyber-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--neon-green), 
+    transparent
+  );
+}

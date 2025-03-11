@@ -1,0 +1,809 @@
+# File: category.ts
+import { defineType, defineField } from '@sanity/types';
+
+export default defineType({
+  name: 'category',
+  title: 'Category',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: { source: 'name' },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+    }),
+  ],
+});
+
+# File: certification.ts
+// schemaTypes/POrtfolio/certification.ts
+import { defineType, defineField } from '@sanity/types';
+import { baseMetadata } from './reusableTypes';
+
+export default defineType({
+  name: 'certification',
+  title: 'Certification',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Certification Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } }),
+    defineField({
+      name: 'issuingOrganization',
+      title: 'Issuing Organization',
+      type: 'object',
+      fields: [
+        { name: 'name', title: 'Name', type: 'string', validation: (Rule) => Rule.required() },
+        { name: 'website', title: 'Website', type: 'url' },
+        { name: 'logo', title: 'Issuer Logo', type: 'image', options: { hotspot: true } },
+      ],
+    }),
+    defineField({
+      name: 'certificateImage',
+      title: 'Certificate Image',
+      type: 'image',
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
+      options: { hotspot: true, metadata: ['exif', 'location'] },
+    }),
+    defineField({
+      name: 'dateIssued',
+      title: 'Date Issued',
+      type: 'date',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'expirationDate',
+      title: 'Expiration Date',
+      type: 'date',
+    }),
+    defineField({
+      name: 'verificationLink',
+      title: 'Verification URL',
+      type: 'url',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Link to dynamic categories managed separately.',
+    }),
+    defineField({
+      name: 'additionalInfo',
+      title: 'Additional Information',
+      type: 'object',
+      fields: [
+        ...baseMetadata.fields,
+        defineField({ name: 'certificationId', title: 'Certification ID', type: 'string' }),
+        defineField({
+          name: 'skills',
+          title: 'Related Skills',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'skill' }] }],
+        }),
+        defineField({
+          name: 'projects',
+          title: 'Related Projects',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'project' }] }],
+        }),
+        defineField({
+          name: 'autoTags',
+          title: 'AI-Generated Tags',
+          type: 'array',
+          of: [{ type: 'string' }],
+          readOnly: true,
+          description: 'Tags inferred by AI based on title and description.',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Active', value: 'active' },
+          { title: 'Expired', value: 'expired' },
+          { title: 'Pending Renewal', value: 'pending' },
+        ],
+      },
+      initialValue: 'active',
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      issuer: 'issuingOrganization.name',
+      media: 'certificateImage',
+      date: 'dateIssued',
+    },
+    prepare({ title, issuer, media, date }) {
+      return {
+        title,
+        subtitle: `${issuer} | Issued: ${date}`,
+        media,
+      };
+    },
+  },
+});
+
+# File: education.ts
+import { defineType, defineField } from '@sanity/types';
+import { baseMetadata, achievementType } from './reusableTypes';
+
+export default defineType({
+  name: 'education',
+  title: 'Education',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'degree',
+      title: 'Degree/Qualification',
+      type: 'string',
+      validation: (Rule: any) => Rule.required(),
+      description: 'e.g., "B.S. in Computer Science" or "Master’s in Cybersecurity"',
+    }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'degree' } }),
+    defineField({
+      name: 'institution',
+      title: 'Institution',
+      type: 'object',
+      fields: [
+        { name: 'name', title: 'Name', type: 'string', validation: (Rule: any) => Rule.required() },
+        { name: 'website', title: 'Website', type: 'url' },
+        { name: 'logo', title: 'Institution Logo', type: 'image', options: { hotspot: true } },
+        { name: 'location', title: 'Location', type: 'string' },
+      ],
+      description: 'Details about the educational institution.',
+    }),
+    defineField({
+      name: 'startDate',
+      title: 'Start Date',
+      type: 'date',
+      validation: (Rule: any) => Rule.required(),
+    }),
+    defineField({
+      name: 'endDate',
+      title: 'End Date',
+      type: 'date',
+      description: 'Leave blank if ongoing (e.g., current enrollment).',
+    }),
+    defineField({
+      name: 'fieldOfStudy',
+      title: 'Field of Study',
+      type: 'string',
+      description: 'e.g., "Cybersecurity", "Software Engineering"',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+      description: 'Details about coursework, thesis, or notable experiences.',
+    }),
+    defineField({
+      name: 'achievements',
+      title: 'Achievements',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'achievement' }] }],
+      description: 'Link to achievements (e.g., "Dean\'s List 2023", "Best Thesis Award")'
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Link to dynamic categories (e.g., "Programming", "Cybersecurity").',
+    }),
+    defineField({
+      name: 'additionalInfo',
+      title: 'Additional Information',
+      type: 'object',
+      fields: [
+        ...baseMetadata.fields,
+        {
+          name: 'gpa',
+          title: 'GPA',
+          type: 'number',
+          validation: (Rule: any) => Rule.min(0).max(4.0).precision(2),
+          description: 'Optional GPA (e.g., 3.85).',
+        },
+        {
+          name: 'skills',
+          title: 'Skills Gained',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'skill' }] }],
+        },
+        {
+          name: 'projects',
+          title: 'Related Projects',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'project' }] }],
+        },
+        {
+          name: 'certifications',
+          title: 'Related Certifications',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'certification' }] }],
+        },
+      ],
+      description: 'Additional data for integration and display.',
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Completed', value: 'completed' },
+          { title: 'In Progress', value: 'in-progress' },
+          { title: 'Planned', value: 'planned' },
+        ],
+      },
+      initialValue: 'completed',
+      description: 'Indicates if education is ongoing or future.',
+    }),
+    defineField({
+      name: 'transcript',
+      title: 'Transcript/Diploma',
+      type: 'file',
+      description: 'Upload a PDF of your transcript or diploma (optional).',
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'degree',
+      subtitle: 'institution.name',
+      media: 'institution.logo',
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title,
+        subtitle,
+        media,
+      };
+    },
+  },
+});
+
+# File: experience.ts
+import { defineType, defineField } from '@sanity/types';
+import { baseMetadata, achievementType } from './reusableTypes';
+
+export default defineType({
+  name: 'experience',
+  title: 'Experience',
+  type: 'document',
+  fields: [
+    defineField({ 
+      name: 'jobTitle', 
+      title: 'Job Title', 
+      type: 'string', 
+      validation: (Rule) => Rule.required() 
+    }),
+    defineField({ 
+      name: 'company', 
+      title: 'Company', 
+      type: 'string', 
+      validation: (Rule) => Rule.required() 
+    }),
+    defineField({ 
+      name: 'location', 
+      title: 'Location', 
+      type: 'string' 
+    }),
+    defineField({ 
+      name: 'startDate', 
+      title: 'Start Date', 
+      type: 'date', 
+      validation: (Rule) => Rule.required() 
+    }),
+    defineField({ 
+      name: 'endDate', 
+      title: 'End Date', 
+      type: 'date' 
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      of: [
+        { type: 'block' }, 
+        { type: 'image', options: { hotspot: true } }
+      ],
+      description: 'Detailed description of your role, supporting text and images.',
+    }),
+    defineField({
+      name: 'achievements',
+      title: 'Achievements',
+      type: 'array',
+      of: [{ type: 'achievement' }],
+      description: 'Key accomplishments with detailed metrics and links.',
+    }),
+    defineField({
+      name: 'metadata',
+      title: 'Additional Information',
+      type: 'object',
+      fields: [
+        ...baseMetadata.fields,
+        defineField({
+          name: 'technologies',
+          title: 'Technologies Used',
+          type: 'array',
+          of: [{ type: 'string' }]
+        }),
+        defineField({
+          name: 'skills',
+          title: 'Skills Applied',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'skill' }] }]
+        }),
+        defineField({
+          name: 'projects',
+          title: 'Related Projects',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'project' }] }]
+        }),
+      ],
+    }),
+    defineField({
+      name: 'isCurrent',
+      title: 'Current Role',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Check if this is your current position.',
+    }),
+  ],
+});
+
+# File: profile.ts
+// schemaTypes/POrtfolio/profile.ts
+import { defineType, defineField } from '@sanity/types';
+
+export default defineType({
+  name: 'profile',
+  title: 'Profile',
+  type: 'document',
+  fields: [
+    defineField({ name: 'name', title: 'Name', type: 'string' }),
+    defineField({ name: 'location', title: 'Location', type: 'geopoint' }),
+    defineField({ name: 'shortBio', title: 'Short Bio', type: 'text' }),
+    defineField({
+      name: 'longBio',
+      title: 'Long Bio',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'image' }],
+    }),
+    defineField({ name: 'videoIntro', title: 'Video Introduction', type: 'url' }),
+    defineField({
+      name: 'profileImage',
+      title: 'Profile Image',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'socialLinks',
+      title: 'Social Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'platform', title: 'Platform', type: 'string' }),
+            defineField({ name: 'url', title: 'URL', type: 'url' }),
+            defineField({
+              name: 'fetchLive',
+              title: 'Fetch Live Posts',
+              type: 'boolean',
+              initialValue: false,
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'visibilityModes',
+      title: 'Visibility Modes',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'resume',
+          title: 'Show in Resume',
+          type: 'boolean',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'portfolio',
+          title: 'Show in Portfolio',
+          type: 'boolean',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'recruiter',
+          title: 'Show in Recruiter',
+          type: 'boolean',
+          initialValue: true,
+        }),
+      ],
+    }),
+    defineField({
+      name: 'email',
+      title: 'Email',
+      type: 'string',
+      validation: (Rule) => Rule.email(),
+      description: 'Your contact email address.',
+    }),
+    defineField({
+      name: 'phone',
+      title: 'Phone',
+      type: 'string',
+      description: 'Your contact phone number (optional).',
+    }),
+    defineField({
+      name: 'contactInstructions',
+      title: 'Contact Instructions',
+      type: 'text',
+      description: 'Optional message about how to contact you.',
+    }),
+    defineField({
+      name: 'resume',
+      title: 'Resume',
+      type: 'file',
+      description: 'Upload your resume PDF or document.',
+    }),
+  ],
+});
+
+# File: project.ts
+import { defineType, defineField } from '@sanity/types';
+import { baseMetadata } from './reusableTypes';
+
+export default defineType({
+  name: 'project',
+  title: 'Project',
+  type: 'document',
+  fields: [
+    defineField({ name: 'title', title: 'Title', type: 'string' }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+      description: 'Rich text with embedded images for detailed storytelling.',
+    }),
+    defineField({
+      name: 'technologies',
+      title: 'Technologies Used',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'e.g., React, Node.js, AES-256',
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Dynamic categories for filtering.',
+    }),
+    defineField({ name: 'githubLink', title: 'GitHub Link', type: 'url' }),
+    defineField({ name: 'demoLink', title: 'Live Demo Link', type: 'url' }),
+    defineField({
+      name: 'docsLink',
+      title: 'Documentation Link',
+      type: 'url',
+      description: 'Optional link to project docs or whitepaper',
+    }),
+    defineField({
+      name: 'additionalLinks',
+      title: 'Additional Links',
+      type: 'array',
+      of: [{ type: 'url' }],
+      description: 'Other relevant URLs (e.g., blog post, case study)',
+    }),
+    defineField({ name: 'startDate', title: 'Start Date', type: 'date' }),
+    defineField({
+      name: 'endDate',
+      title: 'End Date',
+      type: 'date',
+      description: 'Leave blank if ongoing',
+    }),
+    defineField({
+      name: 'thumbnail',
+      title: 'Thumbnail',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'hoverMedia',
+      title: 'Hover Media',
+      type: 'object',
+      fields: [
+        {
+          name: 'type',
+          title: 'Type',
+          type: 'string',
+          options: { list: ['image', 'video', '3d', 'aiPreview'] },
+        },
+        {
+          name: 'image',
+          title: 'Image (GIF)',
+          type: 'image',
+          options: { hotspot: true },
+          hidden: ({ parent }) => parent?.type !== 'image',
+        },
+        {
+          name: 'video',
+          title: 'Video',
+          type: 'file',
+          hidden: ({ parent }) => parent?.type !== 'video',
+        },
+        {
+          name: 'model3d',
+          title: '3D Model',
+          type: 'file',
+          hidden: ({ parent }) => parent?.type !== '3d',
+        },
+        {
+          name: 'aiPreview',
+          title: 'AI-Generated Preview',
+          type: 'url',
+          hidden: ({ parent }) => parent?.type !== 'aiPreview',
+          description: 'Link to AI-generated demo or simulation',
+        },
+      ],
+      description: 'Interactive preview on hover (GIF, video, 3D, or AI-driven).',
+    }),
+    defineField({
+      name: 'metrics',
+      title: 'Metrics',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Label', type: 'string' },
+            { name: 'value', title: 'Value', type: 'number' },
+            { name: 'unit', title: 'Unit', type: 'string' },
+          ],
+        },
+      ],
+      description: 'e.g., {label: "Latency Reduction", value: 50, unit: "ms"}',
+    }),
+    defineField({
+      name: 'interactiveElements',
+      title: 'Interactive Elements',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'e.g., "real-time dashboard", "3D visualization"',
+    }),
+    defineField({
+      name: 'securityFeatures',
+      title: 'Security Features',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'feature', title: 'Feature', type: 'string' },
+            { name: 'description', title: 'Description', type: 'text' },
+            {
+              name: 'impact',
+              title: 'Impact',
+              type: 'string',
+              options: { list: ['critical', 'high', 'medium', 'low'] },
+            },
+          ],
+        },
+      ],
+      description: 'e.g., "Implemented OAuth 2.0 with PKCE" with impact level.',
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: { list: ['in-progress', 'completed', 'archived'] },
+      initialValue: 'completed',
+    }),
+    defineField({
+      name: 'metadata',
+      title: 'Metadata',
+      type: 'object',
+      fields: [
+        ...baseMetadata.fields,
+        { name: 'client', title: 'Client', type: 'string' },
+        { name: 'category', title: 'Category', type: 'string' }, // Legacy field, consider removing if using categories
+        { name: 'version', title: 'Version', type: 'string', description: 'e.g., "v1.2.3"' },
+        {
+          name: 'lastUpdated',
+          title: 'Last Updated',
+          type: 'datetime',
+          initialValue: () => new Date().toISOString(),
+        },
+      ],
+    }),
+    defineField({
+      name: 'analytics',
+      title: 'Analytics Tracking',
+      type: 'object',
+      fields: [
+        { name: 'enabled', title: 'Enable Analytics', type: 'boolean', initialValue: false },
+        { name: 'views', title: 'Page Views', type: 'number', readOnly: true },
+        { name: 'interactions', title: 'User Interactions', type: 'number', readOnly: true },
+      ],
+    }),
+    defineField({
+      name: 'aiContribution',
+      title: 'AI Contribution',
+      type: 'object',
+      fields: [
+        { name: 'usedAI', title: 'Used AI', type: 'boolean', initialValue: false },
+        {
+          name: 'aiDescription',
+          title: 'AI Description',
+          type: 'text',
+          hidden: ({ parent }) => !parent?.usedAI,
+        },
+      ],
+    }),
+  ],
+});
+
+# File: reusableTypes.ts
+import { defineType, defineField } from '@sanity/types';
+
+export const baseMetadata = defineType({
+  name: 'metadata',
+  title: 'Metadata',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'For filtering and personalization',
+    }),
+    defineField({
+      name: 'isFeatured',
+      title: 'Feature This Item',
+      type: 'boolean',
+      initialValue: false,
+    }),
+  ],
+});
+
+export const achievementType = defineType({
+  name: 'achievement',
+  title: 'Achievement',
+  type: 'document',
+  fields: [
+    defineField({ name: 'title', title: 'Achievement Title', type: 'string', validation: (Rule: any) => Rule.required() }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } }),
+    defineField({ name: 'description', title: 'Description', type: 'text' }),
+    defineField({ name: 'date', title: 'Date', type: 'date' }),
+    defineField({
+      name: 'metric',
+      title: 'Metric',
+      type: 'string',
+      description: 'e.g., "Improved sales by 20%"',
+    }),
+    defineField({ name: 'link', title: 'Link', type: 'url' }),
+    ...baseMetadata.fields,
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'metric',
+    },
+  },
+});
+
+# File: skill.ts
+//skill.ts
+
+import { defineType, defineField } from '@sanity/types';
+import { baseMetadata } from './reusableTypes';
+
+export default defineType({
+  name: 'skill',
+  title: 'Skill',
+  type: 'document',
+  fields: [
+    defineField({ name: 'name', title: 'Name', type: 'string' }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'name' } }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'e.g., "Programming", "Cybersecurity", "AI"',
+    }),
+    defineField({
+      name: 'proficiency',
+      title: 'Proficiency',
+      type: 'number',
+      validation: (Rule) => Rule.min(0).max(100).integer(),
+      description: 'Skill level from 0 to 100',
+    }),
+    defineField({
+      name: 'yearsExperience',
+      title: 'Years of Experience',
+      type: 'number',
+      validation: (Rule) => Rule.min(0).integer(),
+    }),
+    defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'visualHint',
+      title: 'Visualization Hint',
+      type: 'string',
+      options: { list: ['bar', 'radar', 'heatmap', 'gauge'] },
+      description: 'Suggested visualization for frontend display',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      description: 'Context or use case for this skill',
+    }),
+    defineField({
+      name: 'metadata',
+      title: 'Metadata',
+      type: 'object',
+      fields: [
+        ...baseMetadata.fields,
+        { name: 'certifications', title: 'Certifications', type: 'array', of: [{ type: 'string' }] },
+        { name: 'lastUsed', title: 'Last Used', type: 'date' },
+        { name: 'projects', title: 'Related Projects', type: 'array', of: [{ type: 'reference', to: [{ type: 'project' }] }] },
+      ],
+    }),
+    defineField({
+      name: 'specialization',
+      title: 'Specialization',
+      type: 'string',
+      options: { list: ['core', 'niche', 'emerging'] },
+      description: '"core" for foundational, "emerging" for cutting-edge',
+    }),
+    defineField({
+      name: 'badge',
+      title: 'Badge',
+      type: 'string',
+      description: 'e.g., "Industry Leader", "Certified Expert"',
+    }),
+  ],
+});

@@ -1,0 +1,68 @@
+/* Performance optimization styles for CyberVerse Portfolio */
+
+/* Only pause animations when tab is hidden, don't remove them */
+.tab-hidden .animate-matrix,
+.tab-hidden .animate-pulse,
+.tab-hidden .animate-glow,
+.tab-hidden .animate-glitch,
+.tab-hidden canvas {
+  animation-play-state: paused !important;
+}
+
+/* Optimize GPU rendering for animations without affecting visual appearance */
+.animate-matrix,
+.animate-pulse,
+.animate-glow,
+.animate-glitch,
+canvas {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.5s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.5s !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Still show canvas elements but reduce animation complexity */
+  canvas {
+    opacity: 0.8 !important;
+  }
+  
+  .particle-container {
+    opacity: 0.6 !important;
+  }
+}
+
+/* Lower-power mode class that can be toggled by the user - less aggressive settings */
+.power-save-mode {
+  --animation-speed: 0.7;
+}
+
+.power-save-mode canvas {
+  opacity: 0.7 !important;
+}
+
+.power-save-mode .particle-container {
+  opacity: 0.6 !important;
+}
+
+/* Optimize images while maintaining visibility */
+img {
+  content-visibility: auto;
+}
+
+/* Optimize paint and compositing */
+.cyber-card, 
+.cyber-button,
+.neon-text,
+.cyber-terminal {
+  contain: content;
+}

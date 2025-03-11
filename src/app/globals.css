@@ -1,26 +1,1063 @@
-@import "tailwindcss";
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+/* Custom Font Declarations - Using Google Fonts instead of local files */
+/* Note: We're keeping these declarations but updating the sources to use Google Fonts */
+@font-face {
+  font-family: 'Share Tech Mono';
+  src: url('https://fonts.gstatic.com/s/sharetechmono/v15/J7aHnp1uDWRBEqV98dVQztYldFcLowEFA87Heg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://fonts.gstatic.com/s/firacode/v22/uU9eCBsR6Z2vfE9aq3bL0fxyUs4tcw4W_A9sJVD7MOzlojwUKaJO.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Define our custom color variables */
+  --dark-base: #1a1b26;
+  --dark-secondary: #282a36;
+  --dark-tertiary: #44475a;
+  --neon-green: #50fa7b;
+  --neon-purple: #bd93f9;
+  --neon-blue: #8be9fd;
+  --neon-orange: #ffb86c;
+  --neon-red: #ff5555;
+  --neon-yellow: #f1fa8c;
+  --cyber-blue: #8be9fd;
+  --cyber-purple: #bd93f9;
+  --cyber-gray: #6272a4;
+  --cyber-orange: #ffb86c;
+  --cyber-red: #ff5555;
+  --error-red: #ff5555;
+  --primary-color: #50fa7b;
+  --secondary-color: #8be9fd;
+  --accent-color: #bd93f9;
+  --background-dark: #282a36;
+  --background-light: #1a1b26;
+  --text-color: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Apply base styles */
+body {
+  background-color: var(--background-dark);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Typography */
+.font-cyber {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.font-terminal {
+  font-family: 'Fira Code', monospace;
+}
+
+.font-cyber-heading {
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Layout Systems */
+.cyber-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.cyber-grid-layout-dense {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.cyber-flex-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cyber-flex-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cyber-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.cyber-section {
+  margin: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-section-divider {
+  position: relative;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  margin: 3rem 0;
+}
+
+/* Custom background classes */
+.custom-bg-dark-base {
+  background-color: var(--dark-base);
+}
+
+.custom-bg-dark-secondary {
+  background-color: var(--dark-secondary);
+}
+
+.custom-bg-dark-tertiary {
+  background-color: var(--dark-tertiary);
+}
+
+.custom-bg-neon-green {
+  background-color: var(--neon-green);
+}
+
+.custom-bg-neon-purple {
+  background-color: var(--neon-purple);
+}
+
+.custom-bg-neon-blue {
+  background-color: var(--neon-blue);
+}
+
+.custom-bg-cyber-blue {
+  background-color: var(--cyber-blue);
+}
+
+.custom-bg-cyber-purple {
+  background-color: var(--cyber-purple);
+}
+
+.custom-bg-cyber-orange {
+  background-color: var(--cyber-orange);
+}
+
+/* Custom text color classes */
+.custom-text-neon-green {
+  color: var(--neon-green);
+}
+
+.custom-text-neon-purple {
+  color: var(--neon-purple);
+}
+
+.custom-text-neon-blue {
+  color: var(--neon-blue);
+}
+
+.custom-text-cyber-blue {
+  color: var(--cyber-blue);
+}
+
+.custom-text-cyber-purple {
+  color: var(--cyber-purple);
+}
+
+.custom-text-cyber-gray {
+  color: var(--cyber-gray);
+}
+
+.custom-text-cyber-orange {
+  color: var(--cyber-orange);
+}
+
+.custom-text-cyber-red {
+  color: var(--cyber-red);
+}
+
+.custom-text-green {
+  color: var(--neon-green);
+}
+
+.custom-text-red {
+  color: var(--neon-red);
+}
+
+/* Custom border classes */
+.custom-border-neon-green {
+  border-color: var(--neon-green);
+}
+
+.custom-border-neon-purple {
+  border-color: var(--neon-purple);
+}
+
+.custom-border-cyber-blue {
+  border-color: var(--cyber-blue);
+}
+
+/* Text gradients */
+.text-gradient-neon {
+  background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+/* Cyber components */
+.cyber-card {
+  background-color: var(--dark-secondary);
+  border: 1px solid rgba(80, 250, 123, 0.3);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cyber-card:hover::before {
+  opacity: 1;
+}
+
+/* Responsive Card Grids */
+.cyber-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .cyber-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (max-width: 480px) {
+  .cyber-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.terminal-window {
+  background-color: var(--dark-base);
+  border: 1px solid var(--neon-green);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Fira Code', monospace;
+}
+
+.cyber-button {
+  background-color: transparent;
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  font-family: 'Share Tech Mono', monospace;
+  padding: 0.5rem 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.25rem;
+}
+
+.cyber-button:hover {
+  background-color: rgba(80, 250, 123, 0.1);
+  box-shadow: 0 0 10px rgba(80, 250, 123, 0.5);
+}
+
+.cyber-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--neon-green);
+  transition: width 0.3s ease;
+}
+
+.cyber-button:hover::after {
+  width: 100%;
+}
+
+.cyber-button-blue {
+  background-color: transparent;
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  font-family: 'Share Tech Mono', monospace;
+  padding: 0.5rem 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.25rem;
+}
+
+.cyber-button-blue:hover {
+  background-color: rgba(139, 233, 253, 0.1);
+  box-shadow: 0 0 10px rgba(139, 233, 253, 0.5);
+}
+
+/* Glow effects */
+.shadow-glow-green {
+  box-shadow: 0 0 15px rgba(80, 250, 123, 0.5);
+}
+
+.shadow-glow-blue {
+  box-shadow: 0 0 15px rgba(139, 233, 253, 0.5);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 15px rgba(189, 147, 249, 0.5);
+}
+
+.shadow-glow-orange {
+  box-shadow: 0 0 15px rgba(255, 184, 108, 0.5);
+}
+
+/* Pulse dot */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--neon-green);
+  display: inline-block;
+}
+
+/* Cyber pulse dashboard */
+.cyber-pulse-dashboard {
+  background-color: rgba(26, 27, 38, 0.8);
+  border: 1px solid rgba(80, 250, 123, 0.3);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animation elements */
+.matrix-drop {
+  position: absolute;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Cyberpunk grid background */
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(80, 250, 123, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80, 250, 123, 0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cyber-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    transparent,
+    rgba(139, 233, 253, 0.1),
+    transparent
+  );
+  animation: scan 3s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0%, 100% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(100%);
+  }
+}
+
+/* Hero section styles */
+.hero-section {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-green), transparent);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* Responsive Grid Layout */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.col-span-12 { grid-column: span 12 / span 12; }
+.col-span-11 { grid-column: span 11 / span 11; }
+.col-span-10 { grid-column: span 10 / span 10; }
+.col-span-9 { grid-column: span 9 / span 9; }
+.col-span-8 { grid-column: span 8 / span 8; }
+.col-span-7 { grid-column: span 7 / span 7; }
+.col-span-6 { grid-column: span 6 / span 6; }
+.col-span-5 { grid-column: span 5 / span 5; }
+.col-span-4 { grid-column: span 4 / span 4; }
+.col-span-3 { grid-column: span 3 / span 3; }
+.col-span-2 { grid-column: span 2 / span 2; }
+.col-span-1 { grid-column: span 1 / span 1; }
+
+@media (max-width: 1024px) {
+  .lg-col-span-12 { grid-column: span 12 / span 12; }
+  .lg-col-span-6 { grid-column: span 6 / span 6; }
+  .lg-col-span-4 { grid-column: span 4 / span 4; }
+  .lg-col-span-3 { grid-column: span 3 / span 3; }
+}
+
+@media (max-width: 768px) {
+  .md-col-span-12 { grid-column: span 12 / span 12; }
+  .md-col-span-6 { grid-column: span 6 / span 6; }
+}
+
+@media (max-width: 640px) {
+  .sm-col-span-12 { grid-column: span 12 / span 12; }
+}
+
+/* Security scan effect */
+.security-scan {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(80, 250, 123, 0.05),
+    transparent
+  );
+  animation: security-scan 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes security-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Dashboard pulse effect */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--neon-green);
+  display: inline-block;
+}
+
+/* Floating animation */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Custom shadows for cards and sections */
+.cyber-shadow {
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(80, 250, 123, 0.1),
+    0 0 0 3px rgba(80, 250, 123, 0.05);
+}
+
+.cyber-shadow-blue {
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(139, 233, 253, 0.1),
+    0 0 0 3px rgba(139, 233, 253, 0.05);
+}
+
+.cyber-shadow-purple {
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(189, 147, 249, 0.1),
+    0 0 0 3px rgba(189, 147, 249, 0.05);
+}
+
+/* Holographic effect - use on cards or images */
+.holographic {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(80, 250, 123, 0.1),
+    rgba(139, 233, 253, 0.1),
+    rgba(189, 147, 249, 0.1),
+    transparent
+  );
+  transform: rotate(30deg);
+  animation: holographic-shift 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes holographic-shift {
+  0% {
+    transform: rotate(0deg) translateY(-50%) translateX(-50%);
+  }
+  100% {
+    transform: rotate(360deg) translateY(-50%) translateX(-50%);
+  }
+}
+
+/* Typographic Styles */
+.font-cyber-heading {
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.font-terminal {
+  font-family: 'Fira Code', monospace;
+}
+
+/* Glitch text effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-text::before {
+  color: var(--neon-blue);
+  animation: glitch-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  animation-delay: 0.1s;
+}
+
+.glitch-text::after {
+  color: var(--neon-red);
+  animation: glitch-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+  animation-delay: 0.2s;
+}
+
+@keyframes glitch-anim {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Network node animation */
+.network-node {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--neon-green);
+  position: relative;
+}
+
+.network-node::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--neon-green);
+  opacity: 0.5;
+  animation: node-pulse 2s infinite;
+}
+
+@keyframes node-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Terminal cursor blinking animation */
+.terminal-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 16px;
+  background-color: var(--neon-green);
+  animation: terminal-blink 1s step-end infinite;
+}
+
+@keyframes terminal-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Security scan animation */
+.security-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--neon-green);
+  opacity: 0.7;
+  box-shadow: 0 0 10px var(--neon-green);
+  animation: security-scan 2s ease-in-out infinite;
+}
+
+@keyframes security-scan {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Scroll animation */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--neon-green);
+  border-bottom: 2px solid var(--neon-green);
+  transform: rotate(45deg);
+  animation: scroll-arrow 2s infinite;
+  margin: -10px;
+}
+
+.scroll-arrow:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.scroll-arrow:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes scroll-arrow {
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) translate(-5px, -5px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+}
+
+/* Parallax container */
+.parallax-container {
+  perspective: 1px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.parallax-layer-back {
+  transform: translateZ(-1px) scale(2);
+}
+
+.parallax-layer-base {
+  transform: translateZ(0);
+}
+
+/* Enhanced card hover effects */
+.hover-card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.hover-card-3d:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+}
+
+/* Cyber Grid Background */
+.cyber-grid-bg {
+  background-color: var(--dark-base);
+  background-image: 
+    linear-gradient(var(--cyber-blue) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cyber-blue) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-grid-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, transparent 0%, var(--dark-base) 100%);
+  pointer-events: none;
+}
+
+/* Cyber Button */
+.cyber-button-sm {
+  background: var(--dark-tertiary);
+  color: var(--neon-green);
+  border: 2px solid var(--neon-green);
+  padding: 0.5rem 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(80, 250, 123, 0.3);
+  border-radius: 4px;
+}
+
+.cyber-button-sm:hover {
+  background: var(--dark-base);
+  box-shadow: 0 0 20px rgba(80, 250, 123, 0.5);
+}
+
+.cyber-button-sm:active {
+  transform: scale(0.95);
+}
+
+/* Cyber Card */
+.cyber-card {
+  background: rgba(26, 27, 38, 0.8);
+  border: 1px solid var(--cyber-blue);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    var(--cyber-blue),
+    transparent
+  );
+  animation: scanline 2s linear infinite;
+}
+
+/* Matrix Rain Effect */
+.matrix-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.matrix-raindrop {
+  font-family: 'Share Tech Mono', monospace;
+  text-shadow: 0 0 8px var(--neon-green);
+  white-space: nowrap;
+}
+
+/* Scan Line Effect */
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Neon Text Effects */
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.custom-text-neon-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 8px var(--neon-green);
+}
+
+.custom-text-cyber-blue {
+  color: var(--cyber-blue);
+  text-shadow: 0 0 8px var(--cyber-blue);
+}
+
+.custom-text-neon-purple {
+  color: var(--neon-purple);
+  text-shadow: 0 0 8px var(--neon-purple);
+}
+
+/* Grid Layouts */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.cyber-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Shadow Effects */
+.shadow-glow-green {
+  box-shadow: 0 0 15px rgba(80, 250, 123, 0.3);
+}
+
+.shadow-glow-blue {
+  box-shadow: 0 0 15px rgba(139, 233, 253, 0.3);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 15px rgba(189, 147, 249, 0.3);
+}
+
+/* Container */
+.cyber-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Custom Background Colors */
+.custom-bg-dark-base {
+  background-color: var(--dark-base);
+}
+
+.custom-bg-dark-secondary {
+  background-color: var(--dark-secondary);
+}
+
+.custom-bg-dark-tertiary {
+  background-color: var(--dark-tertiary);
+}
+
+/* Global Styles Enhancements */
+
+/* Consistent Theme */
+/* Typography */
+.font-cyber {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.font-terminal {
+  font-family: 'Fira Code', monospace;
+}
+
+/* Layout and Alignment */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Interactive Elements */
+.button {
+  background-color: var(--primary-color);
+  border: none;
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.button:hover {
+  background-color: var(--accent-color);
+}
+
+.card {
+  background-color: var(--background-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
